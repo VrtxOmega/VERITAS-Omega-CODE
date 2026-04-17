@@ -7,7 +7,7 @@
 [![Pipeline](https://img.shields.io/badge/Pipeline-10--Gate-gold?style=for-the-badge&labelColor=1a1a1a&color=d4af37)](#)
 [![VERITAS](https://img.shields.io/badge/Standard-VERITAS-gold?style=for-the-badge&labelColor=1a1a1a&color=d4af37)](#)
 
-*The Crown Jewel repository showcasing the VERITAS Ω-CODE v2.0 deterministic software verification layer.*
+*Runs as a pre-deployment verification layer (CI/CD, agent pipelines, or manual evaluation).*
 
 > 👉 **[VIEW THE LIVE DASHBOARD AND HTML SPECIFICATIONS HERE](https://vrtxomega.github.io/VERITAS-Omega-CODE/)** 👈
 
@@ -16,8 +16,6 @@
 ---
 
 > **This system decides whether software should be trusted.**
-> 
-> Runs as a pre-deployment verification layer (CI/CD, agent pipelines, or manual evaluation).
 > 
 > It evaluates a claim across 10 structural enforcement gates.  
 > If any gate fails &rarr; execution halts immediately.  
