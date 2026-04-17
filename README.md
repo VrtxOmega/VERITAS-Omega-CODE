@@ -1,6 +1,6 @@
 <div align="center">
 
-# VERITAS Ω-CODE v2.0
+<h1 align="center" style="color: #C9A84C;">VERITAS Ω-CODE v2.0</h1>
 
 [![Status](https://img.shields.io/badge/Status-SEALED-gold?style=for-the-badge&labelColor=1a1a1a&color=d4af37)](#)
 [![Specification](https://img.shields.io/badge/Specification-v2.0.0-gold?style=for-the-badge&labelColor=1a1a1a&color=d4af37)](#)
