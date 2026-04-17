@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ω-CODE — Full Run Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bk: #09090b; --bk2: #111114; --bk3: #18181c; --bkb: #27272e;
+  --gp: #c9a84c; --gb: #e4c76b; --gd: #a08735;
+  --gf: rgba(201,168,76,0.08); --gbr: rgba(201,168,76,0.2);
+  --t1: #e8e6e1; --t2: #9d9b95; --t3: #6b6964;
+  --red: #e05252; --grn: #5cb870; --amb: #d4a03c; --blu: #5b8fd4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bk);color:var(--t1);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+body{max-width:960px;margin:0 auto;padding:50px 36px 100px}
+
+/* header */
+.hdr{text-align:center;padding:50px 0 40px;position:relative}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:30px;background:linear-gradient(to bottom,transparent,var(--gp))}
+.omega{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:700;color:var(--gp);line-height:1;text-shadow:0 0 60px rgba(201,168,76,0.3)}
+.hdr-t{font-size:11px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:var(--gd);margin-top:4px}
+.hdr-s{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--t2);margin-top:2px}
+.hr{width:100px;height:1px;background:linear-gradient(to right,transparent,var(--gp),transparent);margin:24px auto;border:none}
+
+/* summary bar */
+.sum-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--bkb);border:1px solid var(--bkb);margin:20px 0 40px}
+.sum-cell{background:var(--bk2);padding:16px 12px;text-align:center}
+.sum-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;line-height:1}
+.sum-num.pass{color:var(--grn)}.sum-num.viol{color:var(--red)}.sum-num.inc{color:var(--amb)}.sum-num.mb{color:var(--blu)}.sum-num.total{color:var(--gp)}
+.sum-lbl{font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);margin-top:4px}
+
+/* sections */
+.sec{margin-top:48px}
+.sec-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:rgba(201,168,76,0.12);line-height:1;margin-bottom:-6px}
+.sec-t{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--t1);margin-bottom:4px}
+.sec-t .g{color:var(--gp)}
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--bkb),transparent);margin:40px 0;border:none}
+p{margin-bottom:12px;color:var(--t2);font-size:13px}
+code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--bk3);border:1px solid var(--bkb);padding:1px 5px;color:var(--gb);border-radius:2px}
+
+/* run card */
+.run{background:var(--bk2);border:1px solid var(--bkb);margin:20px 0;overflow:hidden;position:relative}
+.run::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%}
+.run.pass::before{background:var(--grn)}.run.viol::before{background:var(--red)}.run.inc::before{background:var(--amb)}
+.run-hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--bkb)}
+.run-id{display:flex;align-items:center;gap:12px}
+.run-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gp)}
+.run-proj{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--t1)}
+.run-ver{font-size:11px;color:var(--t3);margin-top:1px}
+.run-verdict{text-align:right}
+.vb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 10px;border-radius:2px;letter-spacing:.05em}
+.vb-p{background:rgba(92,184,112,.1);color:var(--grn);border:1px solid rgba(92,184,112,.2)}
+.vb-v{background:rgba(224,82,82,.12);color:var(--red);border:1px solid rgba(224,82,82,.2)}
+.vb-i{background:rgba(212,160,60,.12);color:var(--amb);border:1px solid rgba(212,160,60,.2)}
+.vb-m{background:rgba(91,143,212,.12);color:var(--blu);border:1px solid rgba(91,143,212,.2)}
+.run-reason{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3);margin-top:3px}
+
+/* gate pipeline */
+.gates{padding:0 20px 16px}
+.gate-row{display:grid;grid-template-columns:36px 100px 1fr 80px;align-items:center;min-height:36px;border-bottom:1px solid rgba(39,39,46,.6)}
+.gate-row:last-child{border-bottom:none}
+.gn{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--gp);text-align:center}
+.gname{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.05em}
+.gdetail{font-size:11px;color:var(--t3);padding:0 8px}
+.gv{text-align:right}
+.gv-s{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;padding:2px 6px;border-radius:2px}
+.gv-pass{color:var(--grn)}.gv-viol{color:var(--red)}.gv-inc{color:var(--amb)}.gv-mb{color:var(--blu)}
+.gv-cascade{color:rgba(176,112,112,.5);font-style:italic}
+.gv-skip{color:var(--t3);font-style:italic}
+
+/* seal block */
+.seal-blk{background:var(--gf);border:1px solid var(--gbr);padding:14px 20px;margin:0}
+.seal-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.seal-l{font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--t3)}
+.seal-v{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gb);word-break:break-all}
+.seal-v.small{font-size:9px;color:var(--t3)}
+
+/* run detail boxes */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bkb);margin:0;border-top:1px solid var(--bkb)}
+.detail-cell{background:var(--bk2);padding:10px 16px}
+.detail-l{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.detail-v{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2);margin-top:2px;word-break:break-all}
+
+/* finding box */
+.finding{border-left:3px solid var(--red);background:rgba(224,82,82,.04);padding:14px 18px;margin:0;border-top:1px solid var(--bkb)}
+.finding.amber{border-left-color:var(--amb);background:rgba(212,160,60,.04)}
+.finding-t{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;margin-bottom:6px}
+.finding-t.red{color:var(--red)}.finding-t.amber{color:var(--amb)}
+.finding p{font-size:12px;color:var(--t2);margin:0}
+
+/* stats table */
+.stats{width:100%;border-collapse:collapse;margin:16px 0;font-size:12px}
+.stats th{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);text-align:left;padding:8px 12px;border-bottom:2px solid var(--gbr);background:var(--bk2)}
+.stats td{padding:8px 12px;border-bottom:1px solid var(--bkb);color:var(--t2);vertical-align:top}
+.stats tr:hover{background:var(--gf)}
+
+/* coverage matrix */
+.matrix{display:grid;grid-template-columns:repeat(11,1fr);gap:1px;background:var(--bkb);border:1px solid var(--bkb);margin:16px 0}
+.mx-cell{background:var(--bk2);padding:6px 4px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px}
+.mx-hdr{color:var(--gd);font-weight:600;font-size:7px;letter-spacing:.05em}
+.mx-pass{background:rgba(92,184,112,.08);color:var(--grn)}
+.mx-viol{background:rgba(224,82,82,.08);color:var(--red)}
+.mx-inc{background:rgba(212,160,60,.08);color:var(--amb)}
+.mx-mb{background:rgba(91,143,212,.08);color:var(--blu)}
+.mx-casc{background:rgba(224,82,82,.03);color:rgba(176,112,112,.4)}
+.mx-skip{background:var(--bk2);color:var(--t3)}
+
+/* footer */
+.ftr{margin-top:60px;text-align:center;padding-top:28px;border-top:1px solid var(--bkb)}
+.ftr-o{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gp);opacity:.3}
+.ftr-t{font-size:10px;color:var(--t3);margin-top:4px}
+
+/* verdict legend */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)}
+.legend-dot{width:8px;height:8px;border-radius:1px}
+.legend-dot.p{background:var(--grn)}.legend-dot.v{background:var(--red)}.legend-dot.i{background:var(--amb)}.legend-dot.m{background:var(--blu)}
+
+@media(max-width:700px){
+  body{padding:24px 16px 60px}
+  .sum-bar{grid-template-columns:repeat(3,1fr)}
+  .gate-row{grid-template-columns:28px 70px 1fr 60px}
+  .detail-grid{grid-template-columns:1fr}
+  .matrix{grid-template-columns:repeat(6,1fr)}
+  .seal-row{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="omega">Ω</div>
+  <div class="hdr-t">VERITAS Ω-CODE</div>
+  <div class="hdr-s">Full Verification Run Report</div>
+</header>
+<hr class="hr">
+
+<!-- SUMMARY -->
+<div class="sum-bar">
+  <div class="sum-cell"><div class="sum-num total">5</div><div class="sum-lbl">Total Runs</div></div>
+  <div class="sum-cell"><div class="sum-num pass">1</div><div class="sum-lbl">Pass</div></div>
+  <div class="sum-cell"><div class="sum-num viol">3</div><div class="sum-lbl">Violation</div></div>
+  <div class="sum-cell"><div class="sum-num inc">1</div><div class="sum-lbl">Inconclusive</div></div>
+  <div class="sum-cell"><div class="sum-num mb">0</div><div class="sum-lbl">Model Bound</div></div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot p"></div>PASS</div>
+  <div class="legend-item"><div class="legend-dot v"></div>VIOLATION</div>
+  <div class="legend-item"><div class="legend-dot i"></div>INCONCLUSIVE</div>
+  <div class="legend-item"><div class="legend-dot m"></div>MODEL_BOUND</div>
+</div>
+
+<!-- ═══════════════════ RUN 0: v1.0 ═══════════════════ -->
+<section class="sec">
+  <div class="sec-n">00</div>
+  <div class="sec-t">Vault.sol Reentrancy — <span class="g">Ω-CODE v1.0</span></div>
+  <p>Legacy 8-gate pipeline. Classic Solidity reentrancy pattern: external call before state update, declared lock state never set.</p>
+</section>
+
+<div class="run viol">
+  <div class="run-hdr">
+    <div class="run-id">
+      <div class="run-num">0</div>
+      <div><div class="run-proj">Vault.sol</div><div class="run-ver">Solidity 0.8.20 · Ω-CODE v1.0 · 8-gate pipeline</div></div>
+    </div>
+    <div class="run-verdict">
+      <span class="vb vb-v">VIOLATION</span>
+      <div class="run-reason">INVALID_STATE_REACHABLE</div>
+    </div>
+  </div>
+  <div class="gates">
+    <div class="gate-row"><div class="gn">0</div><div class="gname">CLAEG</div><div class="gdetail">Grammar valid, no free vars, all symbols resolve (UNLOCKED, LOCKED → FILE scope enum)</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">1</div><div class="gname">INTAKE</div><div class="gdetail">3 artifacts: dependency_graph, file_manifest, ast_root</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">2</div><div class="gname">TYPE</div><div class="gdetail">2 trust boundaries: msg.sender.call, msg.sender</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">3</div><div class="gname">EVIDENCE</div><div class="gdetail">2 independent types: AST slice + call trace</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">4</div><div class="gname">AUTHORITY</div><div class="gdetail">Solidity spec confirms call-before-write permits reentrancy</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">5</div><div class="gname">SOLVENCY</div><div class="gdetail">lockState never set to LOCKED in withdraw() — reenterable while UNLOCKED</div><div class="gv"><span class="gv-s gv-viol">VIOLATION</span></div></div>
+    <div class="gate-row"><div class="gn">6</div><div class="gname">INCENTIVE</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-cascade">CASCADE</span></div></div>
+    <div class="gate-row"><div class="gn">7</div><div class="gname">TEMPORAL</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-cascade">CASCADE</span></div></div>
+    <div class="gate-row"><div class="gn">8</div><div class="gname">ADVERSARY</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-cascade">CASCADE</span></div></div>
+  </div>
+  <div class="finding">
+    <div class="finding-t red">VIOLATION: INVALID_STATE_REACHABLE — Gate 5 (SOLVENCY)</div>
+    <p>The assertion <code>CANNOT_REACH(UNLOCKED, LOCKED)</code> is violated. <code>lockState</code> is declared as an enum but never written inside <code>withdraw()</code>. The reachability matrix confirms UNLOCKED → LOCKED is unreachable. The external call can re-enter while balance is stale.</p>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-cell"><div class="detail-l">Gates Run</div><div class="detail-v">6 of 9 (0–5), cascade on 6–8</div></div>
+    <div class="detail-cell"><div class="detail-l">Halted At</div><div class="detail-v">Gate 5 (SOLVENCY)</div></div>
+    <div class="detail-cell"><div class="detail-l">Claim Seal</div><div class="detail-v">8e9730305c9a1094eff32e8fd260f7f78a5868a1d15c4fdf74564997a915011f</div></div>
+    <div class="detail-cell"><div class="detail-l">ENV Hash</div><div class="detail-v">d3467ad39d462a9d5cbc76f6583d6109235905ac30b60f401c462b1070a3685c</div></div>
+  </div>
+  <div class="seal-blk">
+    <div class="seal-row">
+      <span class="seal-l">Run Seal</span>
+      <span class="seal-v">1cbf17f977796f2e40cff39e5203aa3de3c3dc4bf9db5c01560cdd1d2b398440</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════ RUN 1: auth-api ═══════════════════ -->
+<section class="sec">
+  <div class="sec-n">01</div>
+  <div class="sec-t">auth-api — <span class="g">Ω-CODE v2.0 First Run</span></div>
+  <p>10-gate pipeline. Flask authentication API with a deliberately planted hardcoded JWT secret. Tests zero-tolerance security enforcement.</p>
+</section>
+
+<div class="run viol">
+  <div class="run-hdr">
+    <div class="run-id">
+      <div class="run-num">1</div>
+      <div><div class="run-proj">auth-api v0.3.0</div><div class="run-ver">Python 3.11.4 · Flask · Ω-CODE v2.0 · 10-gate pipeline</div></div>
+    </div>
+    <div class="run-verdict">
+      <span class="vb vb-v">VIOLATION</span>
+      <div class="run-reason">SECRET_DETECTED</div>
+    </div>
+  </div>
+  <div class="gates">
+    <div class="gate-row"><div class="gn">1</div><div class="gname">INTAKE</div><div class="gdetail">BuildClaim parsed, ClaimID verified, lockfile matches</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">2</div><div class="gname">TYPE</div><div class="gdetail">4 primitives, 4 boundaries, all symbols + units valid</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">3</div><div class="gname">DEPENDENCY</div><div class="gdetail">4 packages (Flask, PyJWT, bcrypt, requests), 0 CVEs</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">4</div><div class="gname">EVIDENCE</div><div class="gdetail">|S|≥2 all vars, agreement≥0.80, mean Q≥0.70</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">5</div><div class="gname">MATH</div><div class="gdetail">All 4 constraints SAT via interval propagation</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">6</div><div class="gname">COST</div><div class="gdetail">utilization=0.375, well under redline</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">7</div><div class="gname">INCENTIVE</div><div class="gdetail">100% pypi registry concentration</div><div class="gv"><span class="gv-s gv-mb">MODEL_BOUND</span></div></div>
+    <div class="gate-row"><div class="gn">8</div><div class="gname">SECURITY</div><div class="gdetail">Hardcoded JWT secret in auth_api/config.py:12</div><div class="gv"><span class="gv-s gv-viol">VIOLATION</span></div></div>
+    <div class="gate-row"><div class="gn">9</div><div class="gname">ADVERSARY</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+    <div class="gate-row"><div class="gn">10</div><div class="gname">TRACE_SEAL</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+  </div>
+  <div class="finding">
+    <div class="finding-t red">VIOLATION: SECRET_DETECTED — Gate 8 (SECURITY)</div>
+    <p>Zero-tolerance trigger: <code>secrets_detected: true</code> in SecurityManifest. Bandit SAST identified hardcoded JWT secret key at <code>auth_api/config.py:12</code> (severity: CRITICAL). Pipeline halted immediately. No downstream execution.</p>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-cell"><div class="detail-l">Gates Run</div><div class="detail-v">8 of 10</div></div>
+    <div class="detail-cell"><div class="detail-l">Halted At</div><div class="detail-v">Gate 8 (SECURITY)</div></div>
+    <div class="detail-cell"><div class="detail-l">ClaimID</div><div class="detail-v">3c8514ea0cfdffb68d73eea236669aedaf3d241e119fe6b57d15db978739ef1f</div></div>
+    <div class="detail-cell"><div class="detail-l">ENV Hash</div><div class="detail-v">809ba9eed8b2be5314ad61c9492a5fdde0165a937629040962361c7d72a76bc5</div></div>
+  </div>
+  <div class="seal-blk">
+    <div class="seal-row">
+      <span class="seal-l">Trace Seal</span>
+      <span class="seal-v">637e324085b94b26493234afa756236f3dc104f377693aaa141a1faca686a90a</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════ RUN 2: data-transform (CLEAN PASS) ═══════════════════ -->
+<section class="sec">
+  <div class="sec-n">02</div>
+  <div class="sec-t">data-transform — <span class="g">Clean Pass</span></div>
+  <p>Full 10-gate pipeline closure. Well-tested ETL library with diverse evidence, clean dependencies, no security findings, and adversary-resistant constraints.</p>
+</section>
+
+<div class="run pass">
+  <div class="run-hdr">
+    <div class="run-id">
+      <div class="run-num">2</div>
+      <div><div class="run-proj">data-transform v1.2.0</div><div class="run-ver">Python 3.11.4 · pandas + numpy + pyarrow · Ω-CODE v2.0</div></div>
+    </div>
+    <div class="run-verdict">
+      <span class="vb vb-p">PASS</span>
+    </div>
+  </div>
+  <div class="gates">
+    <div class="gate-row"><div class="gn">1</div><div class="gname">INTAKE</div><div class="gdetail">BuildClaim valid, commit verified, lockfile matches</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">2</div><div class="gname">TYPE</div><div class="gdetail">6 primitives, 5 boundaries, all symbols + units valid</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">3</div><div class="gname">DEPENDENCY</div><div class="gdetail">3 packages, 0 CVEs, all hashes verified</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">4</div><div class="gname">EVIDENCE</div><div class="gdetail">|S|≥2 all vars, agreement=1.0, mean Q=0.94</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">5</div><div class="gname">MATH</div><div class="gdetail">5/5 constraints SAT — coverage=0.91, latency=85ms</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">6</div><div class="gname">COST</div><div class="gdetail">utilization=0.42, build_time=38s/120s</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">7</div><div class="gname">INCENTIVE</div><div class="gdetail">max dominance=0.50, 2 registries (pypi+conda)</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">8</div><div class="gname">SECURITY</div><div class="gdetail">no secrets, 0 CRITICAL/HIGH, TLS 1.3, all boundaries mitigated</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">9</div><div class="gname">ADVERSARY</div><div class="gdetail">3/3 attacks survived, no constraint flips, mutation kill=0.82</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">10</div><div class="gname">TRACE_SEAL</div><div class="gdetail">trace chain sealed, manifest written</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-cell"><div class="detail-l">Gates Run</div><div class="detail-v">10 of 10 — full closure</div></div>
+    <div class="detail-cell"><div class="detail-l">Evidence Quality</div><div class="detail-v">mean Q=0.94, agreement=1.0, |S|≥2 all vars</div></div>
+    <div class="detail-cell"><div class="detail-l">Cost Utilization</div><div class="detail-v">0.42 (well under 0.80 warning / 0.95 redline)</div></div>
+    <div class="detail-cell"><div class="detail-l">Adversary Coverage</div><div class="detail-v">3/3 attacks, 0 constraint flips, mutation kill 82%</div></div>
+  </div>
+  <div class="seal-blk">
+    <div class="seal-row">
+      <span class="seal-l">Trace Seal</span>
+      <span class="seal-v">856ac1f26ef302542053e8e9bd7c76cd2d8affe05487dd9850056c41448e7f9b</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════ RUN 3: pricing-engine (ADVERSARY) ═══════════════════ -->
+<section class="sec">
+  <div class="sec-n">03</div>
+  <div class="sec-t">pricing-engine — <span class="g">Adversary Fragility</span></div>
+  <p>Passes all correctness and security checks — it works today. But a 5% perturbation on discount_rate causes total_price to violate its floor constraint. "It works" ≠ "it's robust."</p>
+</section>
+
+<div class="run viol">
+  <div class="run-hdr">
+    <div class="run-id">
+      <div class="run-num">3</div>
+      <div><div class="run-proj">pricing-engine v0.8.0</div><div class="run-ver">Python 3.11.4 · FastAPI + pydantic · Ω-CODE v2.0</div></div>
+    </div>
+    <div class="run-verdict">
+      <span class="vb vb-v">VIOLATION</span>
+      <div class="run-reason">ADVERSARY_FRAGILE</div>
+    </div>
+  </div>
+  <div class="gates">
+    <div class="gate-row"><div class="gn">1</div><div class="gname">INTAKE</div><div class="gdetail">BuildClaim valid, commit verified</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">2</div><div class="gname">TYPE</div><div class="gdetail">3 primitives (discount_rate, total_price, margin), units consistent</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">3</div><div class="gname">DEPENDENCY</div><div class="gdetail">3 packages, 0 CVEs</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">4</div><div class="gname">EVIDENCE</div><div class="gdetail">|S|≥2 all vars, agreement=0.95, mean Q=0.88</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">5</div><div class="gname">MATH</div><div class="gdetail">total_price ≥ 10.00 → SAT (observed: 12.50)</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">6</div><div class="gname">COST</div><div class="gdetail">utilization=0.28</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">7</div><div class="gname">INCENTIVE</div><div class="gdetail">max dominance=0.50, diverse sources</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">8</div><div class="gname">SECURITY</div><div class="gdetail">no secrets, 0 SAST findings, TLS 1.3</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">9</div><div class="gname">ADVERSARY</div><div class="gdetail">discount_rate +5% → total_price 12.50 → 9.84, flips constraint</div><div class="gv"><span class="gv-s gv-viol">VIOLATION</span></div></div>
+    <div class="gate-row"><div class="gn">10</div><div class="gname">TRACE_SEAL</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+  </div>
+  <div class="finding">
+    <div class="finding-t red">VIOLATION: ADVERSARY_FRAGILE — Gate 9 (ADVERSARY)</div>
+    <p>Attack <code>atk-001</code> (fuzz discount_rate +5%): discount_rate 0.15 → 0.1575. Total price drops from $12.50 to $9.84, violating the <code>total_price >= 10.00</code> boundary. A 5% input variation causes a constraint flip — the system is correct but fragile.</p>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-cell"><div class="detail-l">Gates Run</div><div class="detail-v">9 of 10</div></div>
+    <div class="detail-cell"><div class="detail-l">Halted At</div><div class="detail-v">Gate 9 (ADVERSARY)</div></div>
+    <div class="detail-cell"><div class="detail-l">Attack Details</div><div class="detail-v">delta_rel=+0.05 (sign=+1 from hash parity), magnitude=0.05</div></div>
+    <div class="detail-cell"><div class="detail-l">Constraint Flipped</div><div class="detail-v">total_price >= 10.00: SAT → UNSAT</div></div>
+  </div>
+  <div class="seal-blk">
+    <div class="seal-row">
+      <span class="seal-l">Trace Seal</span>
+      <span class="seal-v">7a244f5b2de8f5d08373d23799c08b12217ededc5debf548ac5141ed7050cf62</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════ RUN 4: ml-pipeline (INCONCLUSIVE) ═══════════════════ -->
+<section class="sec">
+  <div class="sec-n">04</div>
+  <div class="sec-t">ml-pipeline — <span class="g">Evidence Starvation</span></div>
+  <p>Early-stage ML training pipeline with only one evidence source per variable. The system didn't say it's bad — it said it can't evaluate the claim. Epistemic honesty, not failure.</p>
+</section>
+
+<div class="run inc">
+  <div class="run-hdr">
+    <div class="run-id">
+      <div class="run-num">4</div>
+      <div><div class="run-proj">ml-pipeline v0.1.0</div><div class="run-ver">Python 3.11.4 · torch + sklearn + mlflow · Ω-CODE v2.0</div></div>
+    </div>
+    <div class="run-verdict">
+      <span class="vb vb-i">INCONCLUSIVE</span>
+      <div class="run-reason">INSUFFICIENT_INDEPENDENCE</div>
+    </div>
+  </div>
+  <div class="gates">
+    <div class="gate-row"><div class="gn">1</div><div class="gname">INTAKE</div><div class="gdetail">BuildClaim valid, commit verified</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">2</div><div class="gname">TYPE</div><div class="gdetail">4 primitives, 3 boundaries, units valid</div><div class="gv"><span class="gv-s gv-pass">PASS</span></div></div>
+    <div class="gate-row"><div class="gn">3</div><div class="gname">DEPENDENCY</div><div class="gdetail">torch 2.1.0 has CVE-2024-XXXX (MEDIUM, patch in 2.2.0)</div><div class="gv"><span class="gv-s gv-mb">MODEL_BOUND</span></div></div>
+    <div class="gate-row"><div class="gn">4</div><div class="gname">EVIDENCE</div><div class="gdetail">|S|=1 for accuracy, f1_score, training_time — need ≥2</div><div class="gv"><span class="gv-s gv-inc">INCONCLUSIVE</span></div></div>
+    <div class="gate-row"><div class="gn">5</div><div class="gname">MATH</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+    <div class="gate-row"><div class="gn">6</div><div class="gname">COST</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+    <div class="gate-row"><div class="gn">7</div><div class="gname">INCENTIVE</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+    <div class="gate-row"><div class="gn">8</div><div class="gname">SECURITY</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+    <div class="gate-row"><div class="gn">9</div><div class="gname">ADVERSARY</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+    <div class="gate-row"><div class="gn">10</div><div class="gname">TRACE_SEAL</div><div class="gdetail">not run</div><div class="gv"><span class="gv-s gv-skip">—</span></div></div>
+  </div>
+  <div class="finding amber">
+    <div class="finding-t amber">INCONCLUSIVE: INSUFFICIENT_INDEPENDENCE — Gate 4 (EVIDENCE)</div>
+    <p>MIS_GREEDY returned |S|=1 for all critical variables (accuracy, f1_score, training_time). The staging regime requires Kmin=2 independent sources. One test suite from one team is not sufficient to verify accuracy claims. The fix is to add a second independent evaluation source — not to lower the bar.</p>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-cell"><div class="detail-l">Gates Run</div><div class="detail-v">4 of 10</div></div>
+    <div class="detail-cell"><div class="detail-l">Halted At</div><div class="detail-v">Gate 4 (EVIDENCE)</div></div>
+    <div class="detail-cell"><div class="detail-l">Also Flagged</div><div class="detail-v">Gate 3: MODEL_BOUND (CVE_MEDIUM) on torch 2.1.0</div></div>
+    <div class="detail-cell"><div class="detail-l">Remediation</div><div class="detail-v">Add ≥1 independent evaluation source per variable</div></div>
+  </div>
+  <div class="seal-blk">
+    <div class="seal-row">
+      <span class="seal-l">Trace Seal</span>
+      <span class="seal-v">bb2e5c1587dcfe22aa5fcaf4f17cfb77973cb2bfae115e722460da50bed1af1d</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════ COVERAGE MATRIX ═══════════════════ -->
+<section class="sec">
+  <div class="sec-n">Σ</div>
+  <div class="sec-t">Gate Coverage <span class="g">Matrix</span></div>
+  <p>All 10 gates exercised across the run set. All 4 verdict types demonstrated.</p>
+</section>
+
+<div class="matrix">
+  <div class="mx-cell mx-hdr">RUN</div><div class="mx-cell mx-hdr">1</div><div class="mx-cell mx-hdr">2</div><div class="mx-cell mx-hdr">3</div><div class="mx-cell mx-hdr">4</div><div class="mx-cell mx-hdr">5</div><div class="mx-cell mx-hdr">6</div><div class="mx-cell mx-hdr">7</div><div class="mx-cell mx-hdr">8</div><div class="mx-cell mx-hdr">9</div><div class="mx-cell mx-hdr">10</div>
+
+  <div class="mx-cell mx-hdr">v1.0</div>
+  <div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-viol">✗</div><div class="mx-cell mx-casc">—</div><div class="mx-cell mx-casc">—</div><div class="mx-cell mx-casc">—</div><div class="mx-cell mx-skip"></div><div class="mx-cell mx-skip"></div>
+
+  <div class="mx-cell mx-hdr">auth</div>
+  <div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-mb">◐</div><div class="mx-cell mx-viol">✗</div><div class="mx-cell mx-skip">—</div><div class="mx-cell mx-skip">—</div>
+
+  <div class="mx-cell mx-hdr">data</div>
+  <div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div>
+
+  <div class="mx-cell mx-hdr">price</div>
+  <div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-viol">✗</div><div class="mx-cell mx-skip">—</div>
+
+  <div class="mx-cell mx-hdr">ml</div>
+  <div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-pass">✓</div><div class="mx-cell mx-mb">◐</div><div class="mx-cell mx-inc">?</div><div class="mx-cell mx-skip">—</div><div class="mx-cell mx-skip">—</div><div class="mx-cell mx-skip">—</div><div class="mx-cell mx-skip">—</div><div class="mx-cell mx-skip">—</div><div class="mx-cell mx-skip">—</div>
+</div>
+
+<!-- AGGREGATE STATS -->
+<table class="stats">
+  <thead>
+    <tr><th>Metric</th><th>Value</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Total runs</td><td>5</td><td>1× v1.0 (8-gate), 4× v2.0 (10-gate)</td></tr>
+    <tr><td>Verdicts</td><td>1 PASS, 3 VIOLATION, 1 INCONCLUSIVE</td><td>All 4 verdict types exercised</td></tr>
+    <tr><td>Gate coverage</td><td>All 10 gates exercised</td><td>Gate 10 only in full-pass run (by design)</td></tr>
+    <tr><td>Halt positions</td><td>Gate 4, 5, 8, 9</td><td>Fail-fast proven at 4 different positions</td></tr>
+    <tr><td>MODEL_BOUND instances</td><td>3</td><td>VENDOR_CONCENTRATION (×1), CVE_MEDIUM (×1), in-pass (×1)</td></tr>
+    <tr><td>Seals verified</td><td>5/5</td><td>All recomputed and matched</td></tr>
+    <tr><td>Unique failure classes</td><td>4</td><td>Reentrancy, secret exposure, adversary fragility, evidence starvation</td></tr>
+    <tr><td>Determinism</td><td>Proven</td><td>Same inputs → same seal across all runs</td></tr>
+  </tbody>
+</table>
+
+<table class="stats">
+  <thead>
+    <tr><th>Failure Class</th><th>Caught At</th><th>Run</th><th>Implication</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>State integrity (reentrancy)</td><td>Gate 5 (SOLVENCY)</td><td>v1.0 Vault.sol</td><td>Logic correctness — does the code behave as declared?</td></tr>
+    <tr><td>Secret exposure</td><td>Gate 8 (SECURITY)</td><td>auth-api</td><td>Security posture — is the system safe to deploy?</td></tr>
+    <tr><td>Adversary fragility</td><td>Gate 9 (ADVERSARY)</td><td>pricing-engine</td><td>Robustness — does it survive real-world variation?</td></tr>
+    <tr><td>Evidence starvation</td><td>Gate 4 (EVIDENCE)</td><td>ml-pipeline</td><td>Epistemic honesty — can we even evaluate the claim?</td></tr>
+  </tbody>
+</table>
+
+<!-- CLOSING -->
+<section class="sec" style="margin-top:40px;text-align:center">
+  <p style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--t2);max-width:600px;margin:0 auto;line-height:1.6">
+    "This layer does not guarantee greatness.<br>It makes hidden weakness harder to survive."
+  </p>
+</section>
+
+<footer class="ftr">
+  <div class="ftr-o">Ω</div>
+  <div class="ftr-t">VERITAS Ω-CODE v1.0 + v2.0 · 5 runs · 5 verified seals · veritas-docs / VRTXOmega</div>
+</footer>
+
+</body>
+</html>

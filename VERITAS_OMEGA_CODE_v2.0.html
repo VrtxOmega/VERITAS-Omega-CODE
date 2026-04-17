@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERITAS Ω-CODE v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bk:#09090b;--bk2:#111114;--bk3:#18181c;--bkb:#27272e;--gp:#c9a84c;--gb:#e4c76b;--gd:#a08735;--gf:rgba(201,168,76,.08);--gbr:rgba(201,168,76,.2);--t1:#e8e6e1;--t2:#9d9b95;--t3:#6b6964;--red:#e05252;--grn:#5cb870;--amb:#d4a03c;--blu:#5b8fd4}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bk);color:var(--t1);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+body{max-width:920px;margin:0 auto;padding:60px 40px 120px}
+.hdr{text-align:center;padding:80px 0 60px;position:relative}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gp))}
+.omega{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;color:var(--gp);line-height:1;margin-bottom:8px;text-shadow:0 0 60px rgba(201,168,76,.3),0 0 120px rgba(201,168,76,.1)}
+.hdr-t{font-size:13px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:var(--gd);margin-bottom:6px}
+.hdr-s{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--t2);font-style:italic}
+.hr{width:120px;height:1px;background:linear-gradient(to right,transparent,var(--gp),transparent);margin:32px auto 28px;border:none}
+.meta{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--bkb);border:1px solid var(--bkb);max-width:520px;margin:0 auto}
+.mc{background:var(--bk2);padding:14px 20px}
+.ml{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.mv{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gb)}
+.mv.sm{font-size:10px}.mv.grn{color:var(--grn)}
+.feeds{margin-top:24px;font-size:11px;color:var(--t3);text-align:center;letter-spacing:.05em}
+.feeds span{color:var(--t2);font-family:'JetBrains Mono',monospace;font-size:11px}
+.sec{margin-top:64px}
+.sn{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;color:rgba(201,168,76,.08);line-height:1;margin-bottom:-8px;position:relative}
+.sn::after{content:'';position:absolute;bottom:8px;left:0;width:100%;height:1px;background:linear-gradient(to right,var(--gbr),transparent)}
+h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--t1);margin-bottom:8px}
+h2 .g{color:var(--gp)}
+h3{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);margin-top:40px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--bkb)}
+h4{font-size:13px;font-weight:600;color:var(--t1);margin-top:28px;margin-bottom:10px}
+p{margin-bottom:16px;color:var(--t2)}
+.quote{border-left:3px solid var(--gp);background:var(--gf);padding:24px 28px;margin:24px 0;font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:var(--t1);line-height:1.6}
+pre{background:var(--bk2);border:1px solid var(--bkb);border-left:3px solid var(--gd);padding:20px 24px;margin:16px 0 20px;overflow-x:auto;border-radius:2px}
+code{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;color:var(--t1)}
+p code,li code{background:var(--bk3);border:1px solid var(--bkb);padding:2px 7px;font-size:12px;color:var(--gb);border-radius:2px}
+.ck{color:var(--gp)}.cs{color:var(--grn)}.cc{color:var(--t3)}.ct{color:var(--blu)}
+.dv{height:1px;background:linear-gradient(to right,transparent,var(--bkb),transparent);margin:48px 0;border:none}
+/* gate cards */
+.gc{background:var(--bk2);border:1px solid var(--bkb);margin:24px 0;position:relative;overflow:hidden}
+.gc::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--gp),var(--gd))}
+.gh{display:flex;align-items:center;gap:16px;padding:20px 24px 16px;border-bottom:1px solid var(--bkb)}
+.g-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gp);line-height:1;min-width:42px;text-align:center}
+.g-name{font-size:14px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--t1)}
+.g-purp{font-size:13px;color:var(--t2);margin-top:2px;letter-spacing:0;text-transform:none;font-weight:400}
+.gb{padding:20px 24px 24px}
+.gb h4{font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);margin-top:20px;margin-bottom:10px}
+.gb h4:first-child{margin-top:0}
+.gb p{font-size:13px;margin-bottom:12px}
+/* tables */
+.tw{margin:16px 0 20px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);text-align:left;padding:12px 16px;border-bottom:2px solid var(--gbr);background:var(--bk2)}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--bkb);color:var(--t2);vertical-align:top}
+tbody tr:hover{background:var(--gf)}
+td code{background:var(--bk3);border:1px solid var(--bkb);padding:1px 6px;font-size:11px;color:var(--gb);border-radius:2px;white-space:nowrap}
+/* trust block */
+.tb{background:var(--gf);border:1px solid var(--gbr);padding:20px 24px;margin:16px 0}
+.tb-t{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--gp);margin-bottom:12px}
+.tb ul{list-style:none;padding:0}
+.tb li{padding-left:18px;position:relative;font-size:13px;color:var(--t2);margin-bottom:6px}
+.tb li::before{content:'›';position:absolute;left:0;color:var(--gd);font-weight:700}
+/* integration cards */
+.ic{background:var(--bk2);border:1px solid var(--bkb);margin-bottom:8px;display:flex}
+.ic-n{min-width:180px;padding:16px 20px;border-right:1px solid var(--bkb);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--gp);background:var(--gf)}
+.ic-r{padding:16px 20px;font-size:13px;color:var(--t2);line-height:1.5}
+/* exclusion list */
+.el{list-style:none;padding:0}
+.el li{padding:10px 0 10px 24px;position:relative;font-size:14px;color:var(--t2);border-bottom:1px solid var(--bkb)}
+.el li:last-child{border-bottom:none}
+.el li::before{content:'—';position:absolute;left:0;color:var(--t3)}
+/* verdict badges */
+.vb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;padding:3px 10px;border-radius:2px;letter-spacing:.05em}
+.vb-p{background:rgba(92,184,112,.12);color:var(--grn);border:1px solid rgba(92,184,112,.2)}
+.vb-v{background:rgba(224,82,82,.12);color:var(--red);border:1px solid rgba(224,82,82,.2)}
+.vb-i{background:rgba(212,160,60,.12);color:var(--amb);border:1px solid rgba(212,160,60,.2)}
+.vb-m{background:rgba(91,143,212,.12);color:var(--blu);border:1px solid rgba(91,143,212,.2)}
+/* evidence formula */
+.formula{background:var(--bk2);border:1px solid var(--gbr);padding:24px;margin:16px 0}
+.formula-t{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gp);margin-bottom:12px}
+/* state evo */
+.evo{background:var(--bk2);border:1px solid var(--bkb);padding:20px 24px;margin:16px 0}
+.evo-row{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--bkb);align-items:flex-start}
+.evo-row:last-child{border-bottom:none}
+.evo-trigger{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gb);min-width:200px;font-weight:600}
+.evo-action{font-size:13px;color:var(--t2)}
+/* footer */
+.ftr{margin-top:80px;text-align:center;padding-top:40px;border-top:1px solid var(--bkb)}
+.ftr-o{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gp);opacity:.4;margin-bottom:12px}
+.ftr-s{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--grn);letter-spacing:.08em;word-break:break-all;max-width:600px;margin:0 auto 8px}
+.ftr-t{font-size:12px;color:var(--t3)}
+@media(max-width:700px){body{padding:30px 20px 80px}.omega{font-size:48px}h2{font-size:22px}.meta{grid-template-columns:1fr}.gh{flex-direction:column;gap:8px}.ic{flex-direction:column}.ic-n{min-width:auto;border-right:none;border-bottom:1px solid var(--bkb)}.evo-row{flex-direction:column;gap:4px}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="omega">Ω</div>
+  <div class="hdr-t">VERITAS Ω-CODE v2.0</div>
+  <div class="hdr-s">Deterministic Software Verification Layer</div>
+  <hr class="hr">
+  <div class="meta">
+    <div class="mc"><div class="ml">Status</div><div class="mv grn">SEALED</div></div>
+    <div class="mc"><div class="ml">Version</div><div class="mv">2.0.0</div></div>
+    <div class="mc"><div class="ml">Sealed</div><div class="mv sm">SHA256:637e3240...a686a90a</div></div>
+    <div class="mc"><div class="ml">Lineage</div><div class="mv sm">v1.0 → Ω Build v1.0.0 → v2.0</div></div>
+  </div>
+  <div class="feeds">Feeds into: <span>omega-brain-mcp · AEGIS · Gravity-Omega · S.E.A.L. Ledger</span></div>
+</header>
+
+<!-- CORE PRINCIPLE -->
+<section class="sec">
+  <div class="quote">"If it cannot be expressed as typed, declared, constraint-bound assertions with artifact evidence, it cannot be evaluated."</div>
+  <p>Ω-CODE v2.0 aligns the code-domain verification layer with the omega-brain-mcp 10-gate pipeline and VERITAS Ω Build v1.0.0, while preserving the deterministic enforcement innovations from Ω-CODE v1.0.</p>
+</section>
+
+<hr class="dv">
+
+<!-- 1. CLAIM OBJECT -->
+<section class="sec">
+  <div class="sn">01</div>
+  <h2>Claim <span class="g">Object</span></h2>
+  <p>All pipeline input is a <strong style="color:var(--t1)">BuildClaim</strong> — a structured object, not a string grammar. Every field must be present and non-null.</p>
+
+  <pre><code><span class="ck">BuildClaim</span> := {
+  <span class="ct">id</span>:            ClaimID,
+  <span class="ct">project</span>:       String,
+  <span class="ct">version</span>:       SemVer,
+  <span class="ct">commit</span>:        Hash,
+  <span class="ct">P</span>:             Set[<span class="ck">BuildPrimitive</span>],     <span class="cc">// what we measure</span>
+  <span class="ct">O</span>:             Set[<span class="ck">Operator</span>],           <span class="cc">// how we combine</span>
+  <span class="ct">R</span>:             Set[<span class="ck">BuildRegime</span>],        <span class="cc">// deployment context</span>
+  <span class="ct">B</span>:             Set[<span class="ck">Boundary</span>],           <span class="cc">// constraints</span>
+  <span class="ct">L</span>:             Set[<span class="ck">LossModel</span>],          <span class="cc">// failure costs</span>
+  <span class="ct">E</span>:             Set[<span class="ck">EvidenceItem</span>],       <span class="cc">// proof</span>
+  <span class="ct">cost</span>:          CostVector,
+  <span class="ct">cost_bounds</span>:   CostBounds,
+  <span class="ct">attack_suite</span>:  AttackSuite,
+  <span class="ct">dependencies</span>:  DependencyManifest,
+  <span class="ct">security</span>:      SecurityManifest,
+  <span class="ct">created_at</span>:    Timestamp
+}
+
+<span class="ck">ClaimID</span> := SHA256(canonical(
+  project + version + commit + P + O + R + B + L + PolicyHash
+))</code></pre>
+
+  <h3>Set Canonicalization</h3>
+  <p>All set fields sorted lexicographically by <code>name</code> or <code>id</code> before hashing. Two BuildClaims with same fields in different order MUST produce the same ClaimID.</p>
+
+  <pre><code><span class="ct">P</span>: sorted by BuildPrimitive.name
+<span class="ct">O</span>: sorted by Operator.name
+<span class="ct">R</span>: sorted by BuildRegime.name
+<span class="ct">B</span>: sorted by Boundary.name
+<span class="ct">L</span>: sorted by LossModel.name
+<span class="ct">E</span>: sorted by EvidenceItem.id</code></pre>
+
+  <h3>Key Types</h3>
+  <pre><code><span class="ck">BuildPrimitive</span> := { name: String, units: String, domain: Interval }
+<span class="ck">Operator</span>       := { name: String, arity: Int, inputs: [Ref], output: Ref }
+<span class="ck">BuildRegime</span>    := { name: <span class="cs">"dev"</span>|<span class="cs">"staging"</span>|<span class="cs">"prod"</span>, predicates: [Predicate] }
+<span class="ck">Boundary</span>       := { name: String, constraint: { variable, operator, target } }
+<span class="ck">PackageRef</span>     := { name, version, registry, integrity_hash }
+<span class="ck">SASTFinding</span>    := { tool, location, severity, finding }</code></pre>
+  <p>Production regime enforces escalated thresholds: K=3, A=0.90, Q=0.80.</p>
+</section>
+
+<hr class="dv">
+
+<!-- 2. ENVIRONMENT -->
+<section class="sec">
+  <div class="sn">02</div>
+  <h2>Environment <span class="g">Declaration</span></h2>
+  <p>Preserved from v1.0. Before any pipeline run, the execution environment MUST be explicitly declared and hashed.</p>
+  <pre><code><span class="ck">ENV_MANIFEST</span> {
+  <span class="ct">os</span>:              String
+  <span class="ct">language_ver</span>:    String
+  <span class="ct">ast_parser</span>:      String
+  <span class="ct">dependency_lock</span>: Hash
+  <span class="ct">gate_config</span>:     Hash          <span class="cc">// PolicyHash</span>
+  <span class="ct">timestamp</span>:       Unix_epoch
+}</code></pre>
+  <p><strong style="color:var(--gb)">ENV_HASH</strong> = SHA256(ENV_MANIFEST in canonical JSON key order). Different output under same ENV_HASH → <code>VIOLATION: NONDETERMINISM</code>.</p>
+</section>
+
+<hr class="dv">
+
+<!-- 3. VERDICTS -->
+<section class="sec">
+  <div class="sn">03</div>
+  <h2><span class="g">Verdicts</span></h2>
+  <pre><code><span class="ck">Verdict</span> := <span class="cs">PASS</span> | <span class="ct">MODEL_BOUND</span> | <span class="amb" style="color:var(--amb)">INCONCLUSIVE</span> | <span style="color:var(--red)">VIOLATION</span>
+
+Precedence: <span style="color:var(--red)">VIOLATION</span> &gt; <span style="color:var(--amb)">INCONCLUSIVE</span> &gt; <span class="ct">MODEL_BOUND</span> &gt; <span class="cs">PASS</span></code></pre>
+
+  <div class="tw"><table>
+    <thead><tr><th>Verdict</th><th>Meaning</th><th>Deploy?</th></tr></thead>
+    <tbody>
+      <tr><td><span class="vb vb-p">PASS</span></td><td>All gates satisfied. Artifact deployable under declared regime.</td><td>Yes</td></tr>
+      <tr><td><span class="vb vb-m">MODEL_BOUND</span></td><td>Gates pass but resource/coverage/confidence near redline.</td><td>With monitoring</td></tr>
+      <tr><td><span class="vb vb-i">INCONCLUSIVE</span></td><td>Insufficient evidence or solver timeout. Cannot affirm or deny.</td><td>No — blocked</td></tr>
+      <tr><td><span class="vb vb-v">VIOLATION</span></td><td>Constraint failure, vulnerability, or test failure.</td><td>No — blocked</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<hr class="dv">
+
+<!-- 4. PIPELINE -->
+<section class="sec">
+  <div class="sn">04</div>
+  <h2><span class="g">Pipeline</span></h2>
+
+  <pre><code><span class="ck">PIPELINE_ORDER</span> := [
+  <span class="cs">INTAKE</span>,  <span class="cs">TYPE</span>,  <span class="cs">DEPENDENCY</span>,  <span class="cs">EVIDENCE</span>,  <span class="cs">MATH</span>,
+  <span class="cs">COST</span>,  <span class="cs">INCENTIVE</span>,  <span class="cs">SECURITY</span>,  <span class="cs">ADVERSARY</span>,  <span class="cs">TRACE_SEAL</span>
+]</code></pre>
+
+  <h3>Fail-Fast Rule</h3>
+  <pre><code><span class="ck">IF</span> Gate N returns <span style="color:var(--red)">VIOLATION</span>:
+  → HALT immediately → final_verdict = VIOLATION
+
+<span class="ck">IF</span> Gate N returns <span style="color:var(--amb)">INCONCLUSIVE</span>:
+  → HALT unless policy gate-skip
+  → If skipped: downgraded to MODEL_BOUND</code></pre>
+
+  <h3>Final Verdict</h3>
+  <pre><code><span class="ck">EXECUTED_GATES</span> := all gates that ran (inclusive of halting gate)
+final_verdict  = max(verdicts over EXECUTED_GATES, by precedence)</code></pre>
+  <p>Only executed gates participate. Gates that never ran are absent, not defaulted.</p>
+</section>
+
+<hr class="dv">
+
+<!-- 5. GATES -->
+<section class="sec">
+  <div class="sn">05</div>
+  <h2>Gate <span class="g">Definitions</span></h2>
+
+  <!-- G1 INTAKE -->
+  <div class="gc"><div class="gh"><div class="g-num">1</div><div><div class="g-name">INTAKE</div><div class="g-purp">Parse, validate, and canonicalize the BuildClaim.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">INTAKE_GATE</span>(payload):
+  1. Parse BuildClaim from source (CI, CLI, API)
+  2. Validate all required fields present and non-null
+  3. Verify commit hash matches HEAD
+  4. Compute ClaimID — verify match
+  5. Verify lockfile_hash matches disk
+  6. Validate ENV_MANIFEST present and hashable
+
+  → <span class="cs">PASS</span> or <span style="color:var(--red)">VIOLATION</span>: INTAKE_MALFORMED
+                        INTAKE_COMMIT_MISMATCH
+                        INTAKE_LOCKFILE_DRIFT</code></pre>
+  <p style="margin-top:12px"><strong style="color:var(--gd)">Artifact:</strong> <code>intake_report.json</code></p></div></div>
+
+  <!-- G2 TYPE -->
+  <div class="gc"><div class="gh"><div class="g-num">2</div><div><div class="g-name">TYPE</div><div class="g-purp">Type safety, unit consistency, symbol resolution.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">TYPE_GATE</span>(claim):
+  1. Enforce unique primitive names
+  2. Validate non-empty domains
+  3. Validate operator arity + type references
+  4. Check all constraint symbols → declared primitives
+  5. Validate unit consistency across operators
+  6. Verify regime predicates reference declared primitives
+
+  → <span class="cs">PASS</span> or <span style="color:var(--red)">VIOLATION</span>: UNDEFINED_SYMBOL | UNIT_MISMATCH
+                        ARITY_ERROR | EMPTY_DOMAIN</code></pre>
+  <div class="tb" style="margin-top:16px">
+    <div class="tb-t">TRUST_BOUNDARY — detected and logged for Gate 8 (SECURITY):</div>
+    <ul>
+      <li>External input enters the system</li>
+      <li>Privilege level changes</li>
+      <li>Contract/user boundary crossed</li>
+      <li>IPC or network boundary</li>
+      <li>Deserialization on untrusted data</li>
+    </ul>
+  </div>
+  <p><strong style="color:var(--gd)">Artifacts:</strong> <code>type_report.json</code> (includes trust boundary map)</p></div></div>
+
+  <!-- G3 DEPENDENCY -->
+  <div class="gc"><div class="gh"><div class="g-num">3</div><div><div class="g-name">DEPENDENCY</div><div class="g-purp">Supply chain verification. First-class attack surface.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">DEPENDENCY_GATE</span>(claim):
+  1. Parse SBOM from DependencyManifest
+  2. Verify every PackageRef integrity_hash vs registry
+  3. Scan CVEs:
+     CRITICAL/HIGH (no patch) → <span style="color:var(--red)">VIOLATION(CVE_CRITICAL)</span>
+     MEDIUM → <span class="ct">MODEL_BOUND(CVE_MEDIUM)</span> if policy allows
+     LOW → log + <span class="cs">PASS</span>
+  4. Check dependency depth vs DEPENDENCY_DEPTH_REDLINE
+  5. Detect deprecated/abandoned packages (&gt;2yr, archived)
+  6. Detect duplicate packages at different versions
+  7. Verify license compatibility</code></pre>
+  <p style="margin-top:12px"><strong style="color:var(--gd)">Artifact:</strong> <code>dependency_report.json</code></p></div></div>
+
+  <!-- G4 EVIDENCE -->
+  <div class="gc"><div class="gh"><div class="g-num">4</div><div><div class="g-name">EVIDENCE</div><div class="g-purp">Quality, independence, and agreement of evidence.</div></div></div>
+  <div class="gb">
+  <div class="formula">
+    <div class="formula-t">Quality Function</div>
+    <pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">clamp01</span>(x) := max(0, min(1, x))
+
+<span class="ck">Quality</span>(e) = clamp01(
+  0.40 × provenance_score(tier)      <span class="cc">// A=1.0, B=0.7, C=0.4</span>
++ 0.25 × repeatability_score(method) <span class="cc">// repeatable=1.0, else=0.5</span>
++ 0.20 × freshness_score(e)          <span class="cc">// within TTL=1.0, expired=0.0</span>
++ 0.15 × environment_match_score(e)  <span class="cc">// matches=1.0, partial=0.5</span>
+)</code></pre>
+  </div>
+  <div class="formula">
+    <div class="formula-t">Independence Graph</div>
+    <pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code>Edge between e_i, e_j if:
+  same source_id
+  OR same tool + config + |Δt| ≤ 60s
+  OR explicit dependency declared
+
+<span class="ck">MIS_GREEDY</span>(G):
+  Order by (degree asc, id asc)
+  Greedily pick non-adjacent → Timeout → <span style="color:var(--amb)">INCONCLUSIVE(MIS_TIMEOUT)</span></code></pre>
+  </div>
+  <h4>Thresholds by Regime</h4>
+  <div class="tw"><table>
+    <thead><tr><th>Regime</th><th>Kmin</th><th>Amin</th><th>Qmin</th></tr></thead>
+    <tbody>
+      <tr><td>dev</td><td>2</td><td>0.70</td><td>0.60</td></tr>
+      <tr><td>staging</td><td>2</td><td>0.80</td><td>0.70</td></tr>
+      <tr><td>prod</td><td>3</td><td>0.90</td><td>0.80</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong style="color:var(--gd)">Artifact:</strong> <code>evidence_report.json</code></p></div></div>
+
+  <!-- G5 MATH -->
+  <div class="gc"><div class="gh"><div class="g-num">5</div><div><div class="g-name">MATH</div><div class="g-purp">Constraint satisfaction via interval propagation or SMT.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">MATH_GATE</span>(claim):
+  1. Bind evidence values → constraint variables
+  2. Translate → interval propagation or SMT
+  3. SAT → <span class="cs">PASS</span>
+     UNSAT → <span style="color:var(--red)">VIOLATION(UNSAT_CONSTRAINT)</span>
+     TIMEOUT → <span style="color:var(--amb)">INCONCLUSIVE(DECIDABILITY_TIMEOUT)</span></code></pre>
+  <p style="margin-top:12px">Scope: decidable fragment only (LRA, bit-vectors, SI units, range bounding). Non-linear → requires formal proof or accept <code>MODEL_BOUND(GODEL_CEILING)</code>.</p>
+  <p><strong style="color:var(--gd)">Artifact:</strong> <code>math_report.json</code></p></div></div>
+
+  <!-- G6 COST -->
+  <div class="gc"><div class="gh"><div class="g-num">6</div><div><div class="g-name">COST</div><div class="g-purp">Resource consumption within declared bounds.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">COST_GATE</span>(claim):
+  u = max(cost_i / bound_i) over all components
+
+  u &lt; 0.80  → <span class="cs">PASS</span>
+  u &lt; 0.95  → <span class="cs">PASS</span> with warning
+  u ≥ 0.95  → <span class="ct">MODEL_BOUND(COST_REDLINING)</span>
+  no bound  → <span style="color:var(--red)">VIOLATION(UNDECLARED_COST_BOUND)</span></code></pre>
+  <p style="margin-top:12px"><strong style="color:var(--gd)">Artifact:</strong> <code>cost_report.json</code></p></div></div>
+
+  <!-- G7 INCENTIVE -->
+  <div class="gc"><div class="gh"><div class="g-num">7</div><div><div class="g-name">INCENTIVE</div><div class="g-purp">Evidence source dominance and vendor concentration detection.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">INCENTIVE_GATE</span>(claim):
+  Dominance(x) = max_count_by_source / |S_x|
+
+  &gt; 0.75 → <span style="color:var(--red)">VIOLATION(EVIDENCE_CAPTURE)</span>
+  &gt; 0.50 → <span class="ct">MODEL_BOUND(DOMINANCE_DETECTED)</span>
+
+  Registry concentration:
+  single registry &gt;80% → <span class="ct">MODEL_BOUND(VENDOR_CONCENTRATION)</span></code></pre>
+  <p style="margin-top:12px"><strong style="color:var(--gd)">Artifact:</strong> <code>incentive_report.json</code></p></div></div>
+
+  <!-- G8 SECURITY -->
+  <div class="gc"><div class="gh"><div class="g-num">8</div><div><div class="g-name">SECURITY</div><div class="g-purp">Secrets, SAST, auth boundaries, crypto, trust boundary enforcement.</div></div></div>
+  <div class="gb">
+  <p style="font-size:12px;color:var(--amb);margin-bottom:14px"><strong>Dependency contract:</strong> MUST consume <code>type_report.json</code> from Gate 2. Missing → <code>VIOLATION(TYPE_SECURITY_LINK_FAILURE)</code>.</p>
+  <pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">SECURITY_GATE</span>(claim):
+  0. Verify type_report.json + trust_boundaries exist
+  1. secrets_detected == true → <span style="color:var(--red)">VIOLATION(SECRET_DETECTED)</span>  <span class="cc">// zero tolerance</span>
+  2. SAST: CRITICAL → <span style="color:var(--red)">VIOLATION</span>  HIGH → <span style="color:var(--red)">VIOLATION</span>
+          MEDIUM → <span class="ct">MODEL_BOUND</span>  LOW → log
+  3. Verify auth_boundaries declared
+  4. Verify injection_surfaces mitigated
+  5. Verify TLS ≥ 1.2
+  6. Trust boundaries without mitigation → <span style="color:var(--red)">VIOLATION(UNMITIGATED_BOUNDARY)</span></code></pre>
+  <p style="margin-top:12px"><strong style="color:var(--gd)">Artifact:</strong> <code>security_report.json</code></p></div></div>
+
+  <!-- G9 ADVERSARY -->
+  <div class="gc"><div class="gh"><div class="g-num">9</div><div><div class="g-name">ADVERSARY</div><div class="g-purp">Hostile verification. Fuzz, mutate, exploit, stress-test.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">ADVERSARY_GATE</span>(claim):
+  For each attack in AttackSuite:
+    <span class="ck">PerturbParam</span>: param × (1 + delta_rel)
+      magnitude := 0.05 (default, in PolicyHash)
+      sign := +1 if hash(attack.id) % 2 == 0, else -1
+      delta_rel := sign × magnitude
+
+    Re-evaluate constraints under perturbation
+    Constraint flips SAT→UNSAT → <span style="color:var(--red)">VIOLATION(ADVERSARY_FRAGILE)</span>
+
+  Categories: fuzz · mutation · supply_chain · outage · load_spike · exploit
+  Incomplete coverage → <span style="color:var(--amb)">INCONCLUSIVE(COVERAGE_INCOMPLETE)</span></code></pre>
+  <p style="margin-top:12px"><strong style="color:var(--gd)">Artifact:</strong> <code>adversary_report.json</code></p></div></div>
+
+  <!-- G10 TRACE/SEAL -->
+  <div class="gc"><div class="gh"><div class="g-num">10</div><div><div class="g-name">TRACE / SEAL</div><div class="g-purp">Cryptographic seal over the entire pipeline run.</div></div></div>
+  <div class="gb"><pre style="background:transparent;border:none;border-left:none;padding:0;margin:0"><code><span class="ck">TRACE_SEAL_GATE</span>(claim, gate_results):
+  1. PolicyHash = SHA256(canonical(version, hash_alg, solver_backend,
+     timeouts, thresholds, attack_params, gate_order, attack_suite_hash))
+
+  2. trace_0 = SHA256(<span class="cs">"GENESIS"</span> + PolicyHash + ClaimID)
+     trace_k = SHA256(trace_prev + canonical(gate_result_k))
+
+  3. seal = trace_final
+
+  4. manifest.json = { claim_id, env_hash, policy_hash,
+     gate_results: [hashes], final_verdict, seal, timestamp }
+
+  5. Append seal to S.E.A.L. ledger
+
+  Always <span class="cs">PASS</span> <span class="cc">(recording, not evaluation)</span></code></pre>
+  <p style="margin-top:12px"><strong style="color:var(--gd)">Artifacts:</strong> <code>trace.jsonl</code>, <code>manifest.json</code>, <code>seal.json</code></p></div></div>
+</section>
+
+<hr class="dv">
+
+<!-- 6. CANONICALIZATION -->
+<section class="sec">
+  <div class="sn">06</div>
+  <h2>Artifact <span class="g">Canonicalization</span></h2>
+  <pre><code><span class="ck">CANONICAL_FORM</span>:
+  Encoding:    <span class="cs">UTF-8</span> (no BOM)
+  Format:      <span class="cs">JSON</span>
+  Key order:   <span class="cs">lexicographic</span> (recursive)
+  Whitespace:  <span class="cs">compact</span> — no trailing, no indentation
+  Numbers:     no leading zeros, no trailing decimal zeros
+  Strings:     double-quoted, escaped per <span class="cs">RFC 8259</span>
+  Nulls:       literal <span class="cs">"null"</span> (not absent keys)</code></pre>
+  <p>Binary artifacts → Base64 JSON wrapper: <code>{"_binary": true, "encoding": "base64", "data": "..."}</code></p>
+</section>
+
+<hr class="dv">
+
+<!-- 7. DETERMINISM -->
+<section class="sec">
+  <div class="sn">07</div>
+  <h2>Determinism <span class="g">Invariant</span></h2>
+  <p>Given identical ENV_HASH + ClaimID + PolicyHash → pipeline MUST produce identical seal. Failure → <code>VIOLATION: NONDETERMINISM</code>.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Source</th><th>Handling</th></tr></thead>
+    <tbody>
+      <tr><td>System timestamps</td><td>Use <code>ENV_MANIFEST.timestamp</code></td></tr>
+      <tr><td>Random seeds</td><td>Seeded from ClaimID or declared fixed seed</td></tr>
+      <tr><td>External API calls</td><td>Classified <code>MODEL_BOUND</code>, not run inline</td></tr>
+      <tr><td>File system ordering</td><td>All lists sorted before hashing</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<hr class="dv">
+
+<!-- 8. STATE EVOLUTION -->
+<section class="sec">
+  <div class="sn">08</div>
+  <h2>State <span class="g">Evolution</span></h2>
+  <div class="evo">
+    <div class="evo-row"><div class="evo-trigger">Structural edit</div><div class="evo-action">New ClaimID → full re-run from Gate 1</div></div>
+    <div class="evo-row"><div class="evo-trigger">Evidence update</div><div class="evo-action">Same ClaimID → re-run from Gate 4 (EVIDENCE)</div></div>
+    <div class="evo-row"><div class="evo-trigger">Environment change</div><div class="evo-action">New ENV_HASH → full re-run, previous seal invalidated</div></div>
+  </div>
+</section>
+
+<hr class="dv">
+
+<!-- 9. REASON CODES -->
+<section class="sec">
+  <div class="sn">09</div>
+  <h2>Reason Codes — <span class="g">Complete Index</span></h2>
+  <div class="tw"><table>
+    <thead><tr><th>Gate</th><th>Code</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>INTAKE</td><td><code>INTAKE_MALFORMED</code></td><td>BuildClaim parse failure</td></tr>
+      <tr><td>INTAKE</td><td><code>INTAKE_COMMIT_MISMATCH</code></td><td>Commit hash doesn't match HEAD</td></tr>
+      <tr><td>INTAKE</td><td><code>INTAKE_LOCKFILE_DRIFT</code></td><td>Lockfile hash doesn't match disk</td></tr>
+      <tr><td>TYPE</td><td><code>UNDEFINED_SYMBOL</code></td><td>Constraint references undeclared primitive</td></tr>
+      <tr><td>TYPE</td><td><code>UNIT_MISMATCH</code></td><td>Incompatible units across operator</td></tr>
+      <tr><td>TYPE</td><td><code>ARITY_ERROR</code></td><td>Operator input count wrong</td></tr>
+      <tr><td>TYPE</td><td><code>EMPTY_DOMAIN</code></td><td>Primitive domain has no valid range</td></tr>
+      <tr><td>DEPENDENCY</td><td><code>CVE_CRITICAL</code></td><td>Critical/high CVE with no patch</td></tr>
+      <tr><td>DEPENDENCY</td><td><code>CVE_MEDIUM</code></td><td>Medium CVE (MODEL_BOUND if policy)</td></tr>
+      <tr><td>EVIDENCE</td><td><code>INSUFFICIENT_INDEPENDENCE</code></td><td>|S_x| &lt; Kmin</td></tr>
+      <tr><td>EVIDENCE</td><td><code>LOW_AGREEMENT</code></td><td>agreement(S_x) &lt; Amin</td></tr>
+      <tr><td>EVIDENCE</td><td><code>LOW_QUALITY</code></td><td>mean Quality &lt; Qmin</td></tr>
+      <tr><td>EVIDENCE</td><td><code>MIS_TIMEOUT</code></td><td>Independence solver timed out</td></tr>
+      <tr><td>MATH</td><td><code>UNSAT_CONSTRAINT</code></td><td>Constraint violated by evidence</td></tr>
+      <tr><td>MATH</td><td><code>DECIDABILITY_TIMEOUT</code></td><td>SMT solver exceeded limit</td></tr>
+      <tr><td>MATH</td><td><code>GODEL_CEILING</code></td><td>Non-linear, no formal proof</td></tr>
+      <tr><td>COST</td><td><code>UNDECLARED_COST_BOUND</code></td><td>Cost component with no bound</td></tr>
+      <tr><td>COST</td><td><code>COST_REDLINING</code></td><td>Utilization ≥ 0.95</td></tr>
+      <tr><td>INCENTIVE</td><td><code>EVIDENCE_CAPTURE</code></td><td>Single source &gt;75% of evidence</td></tr>
+      <tr><td>INCENTIVE</td><td><code>DOMINANCE_DETECTED</code></td><td>Single source &gt;50% of evidence</td></tr>
+      <tr><td>INCENTIVE</td><td><code>VENDOR_CONCENTRATION</code></td><td>Single registry &gt;80% of packages</td></tr>
+      <tr><td>SECURITY</td><td><code>TYPE_SECURITY_LINK_FAILURE</code></td><td>type_report.json missing trust_boundaries</td></tr>
+      <tr><td>SECURITY</td><td><code>SECRET_DETECTED</code></td><td>Secrets in codebase (zero tolerance)</td></tr>
+      <tr><td>SECURITY</td><td><code>SAST_CRITICAL</code></td><td>Critical SAST finding</td></tr>
+      <tr><td>SECURITY</td><td><code>SAST_HIGH</code></td><td>High SAST finding</td></tr>
+      <tr><td>SECURITY</td><td><code>SAST_MEDIUM</code></td><td>Medium SAST finding</td></tr>
+      <tr><td>SECURITY</td><td><code>UNMITIGATED_BOUNDARY</code></td><td>Trust boundary without mitigation</td></tr>
+      <tr><td>ADVERSARY</td><td><code>ADVERSARY_FRAGILE</code></td><td>Constraint flips under perturbation</td></tr>
+      <tr><td>ADVERSARY</td><td><code>COVERAGE_INCOMPLETE</code></td><td>Not all attack categories executed</td></tr>
+      <tr><td>PIPELINE</td><td><code>PIPELINE_ORDER_MISMATCH</code></td><td>Gates out of order</td></tr>
+      <tr><td>PIPELINE</td><td><code>NONDETERMINISM</code></td><td>Same input, different output</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<hr class="dv">
+
+<!-- 10. INTEGRATION -->
+<section class="sec">
+  <div class="sn">10</div>
+  <h2>System <span class="g">Integration</span></h2>
+  <div class="ic"><div class="ic-n">omega-brain-mcp</div><div class="ic-r">Hosts 10-gate pipeline; exposes veritas_run_pipeline, veritas_compute_quality, veritas_mis_greedy, veritas_claeg_resolve as individual MCP tools; appends seal to S.E.A.L. hash chain</div></div>
+  <div class="ic"><div class="ic-n">AEGIS / AEGIS-Rewrite</div><div class="ic-r">Tier 1: VIOLATION records → deterministic fixes. Tier 2: MODEL_BOUND records → AI-assisted remediation under constraint envelope.</div></div>
+  <div class="ic"><div class="ic-n">Gravity-Omega</div><div class="ic-r">Execution host; enforces VTP signature on gate outputs before downstream routing</div></div>
+  <div class="ic"><div class="ic-n">Veritas Vault</div><div class="ic-r">Archives seal, ENV_MANIFEST, all gate report hashes via omega_log_session</div></div>
+  <div class="ic"><div class="ic-n">S.E.A.L. Ledger</div><div class="ic-r">Append-only chain of seal values; NONDETERMINISM violations logged as entries</div></div>
+</section>
+
+<hr class="dv">
+
+<!-- 11. DELTA -->
+<section class="sec">
+  <div class="sn">11</div>
+  <h2>Delta from <span class="g">v1.0</span></h2>
+  <div class="tw"><table>
+    <thead><tr><th>v1.0 Concept</th><th>v2.0 Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>CLAEG EBNF grammar</td><td>Replaced</td><td>→ BuildClaim object model (MCP wire format)</td></tr>
+      <tr><td>Gate 0 (CLAEG)</td><td>Absorbed</td><td>→ INTAKE + TYPE</td></tr>
+      <tr><td>Gate 4 (AUTHORITY)</td><td>Absorbed</td><td>→ MATH + SECURITY</td></tr>
+      <tr><td>Gate 5 (SOLVENCY)</td><td>Absorbed</td><td>→ MATH + ADVERSARY</td></tr>
+      <tr><td>Gate 7 (TEMPORAL)</td><td>Absorbed</td><td>→ ADVERSARY (fuzz/mutation)</td></tr>
+      <tr><td>REJECTED_AT_CLAEG</td><td>Removed</td><td>INTAKE + TYPE cover all failures</td></tr>
+      <tr><td>EPISTEMIC_DECAY</td><td>Semantics preserved</td><td>→ State Evolution: ENV_HASH change = re-run</td></tr>
+      <tr><td>CASCADED_FAIL</td><td>Removed</td><td>Fail-fast halts; no downstream runs</td></tr>
+      <tr><td>ENV_MANIFEST</td><td><strong style="color:var(--grn)">Preserved</strong></td><td>Unique to Ω-CODE</td></tr>
+      <tr><td>Canonicalization</td><td><strong style="color:var(--grn)">Preserved</strong></td><td>Critical for cross-system verification</td></tr>
+      <tr><td>Trust boundaries</td><td><strong style="color:var(--grn)">Preserved</strong></td><td>Feeds into SECURITY gate</td></tr>
+      <tr><td>Evidence diversity</td><td><strong style="color:var(--grn)">Preserved</strong> (softened)</td><td>Flagged, not hard-rejected</td></tr>
+      <tr><td>Execution bounds</td><td>Replaced</td><td>→ PolicyHash timeouts</td></tr>
+      <tr><td>Per-claim SEAL</td><td>Replaced</td><td>→ trace chain: H(prev + gate_result)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<hr class="dv">
+
+<!-- 12. NOT IN SCOPE -->
+<section class="sec">
+  <div class="sn">12</div>
+  <h2>What Is <span class="g">Not In Scope</span></h2>
+  <ul class="el">
+    <li>Reason narratively about code quality, style, or intent</li>
+    <li>Produce probabilistic severity scores (use AEGIS for triage)</li>
+    <li>Evaluate claims not expressible as structured BuildClaim objects</li>
+    <li>Replace formal verification for safety-critical systems</li>
+    <li>Model epistemic entropy, fractal composability, or causal do-calculus</li>
+  </ul>
+</section>
+
+<!-- FOOTER -->
+<footer class="ftr">
+  <div class="ftr-o">Ω</div>
+  <div class="ftr-s">SEALED — SHA256:637e324085b94b26493234afa756236f3dc104f377693aaa141a1faca686a90a</div>
+  <div class="ftr-t">v1.0 (8-gate CLAEG) → Ω Build v1.0.0 (10-gate BuildClaim) → v2.0 (unified)<br>veritas-docs / VRTXOmega</div>
+</footer>
+
+</body>
+</html>
