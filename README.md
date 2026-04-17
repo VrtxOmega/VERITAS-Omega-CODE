@@ -17,6 +17,8 @@
 
 > **This system decides whether software should be trusted.**
 > 
+> Runs as a pre-deployment verification layer (CI/CD, agent pipelines, or manual evaluation).
+> 
 > It evaluates a claim across 10 structural enforcement gates.  
 > If any gate fails &rarr; execution halts immediately.  
 > If all pass &rarr; the result is cryptographically sealed with a reproducible trace.
