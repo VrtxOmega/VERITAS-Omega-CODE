@@ -21,17 +21,13 @@
 > If any gate fails &rarr; execution halts immediately.  
 > If all pass &rarr; the result is cryptographically sealed with a reproducible trace.
 
-**Example:**
-```text
-auth-api v0.3.0
-
-Gate 8: SECURITY
-→ SECRET_DETECTED
-
-Result:
-VIOLATION (execution halted)
-```
-*This would have prevented shipping a compromised authentication system.*
+> [!CAUTION]
+> **Example: auth-api v0.3.0**
+> 
+> **Gate 8: SECURITY** &rarr; `SECRET_DETECTED`  
+> **Result:** `VIOLATION` *(execution halted)*
+> 
+> *This would have prevented shipping a compromised authentication system.*
 
 ---
 
