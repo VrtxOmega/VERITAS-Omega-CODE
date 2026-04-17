@@ -61,6 +61,35 @@ This repository serves as the definitive source of truth for the v2.0 framework,
 
 The core mechanism of VERITAS is the **10-Gate Pipeline**. Every BuildClaim must pass sequentially through these structural enforcement gates. A failure at any gate halts pipeline execution.
 
+```mermaid
+flowchart LR
+    G1[1. INTAKE] --> G2[2. TYPE]
+    G2 --> G3[3. DEPENDENCY]
+    G3 --> G4[4. EVIDENCE]
+    G4 --> G5[5. MATH]
+    G5 --> G6[6. COST]
+    G6 --> G7[7. INCENTIVE]
+    G7 --> G8[8. SECURITY]
+    G8 --> G9[9. ADVERSARY]
+    G9 --> G10[10. TRACE/SEAL]
+
+    classDef default fill:#1a1a1a,stroke:#d4af37,stroke-width:1px,color:#e8e6e1;
+```
+
+### Quick Start / Reference Evaluators
+
+To immediately experiment with the protocol, see the following public endpoints:
+
+- **JSON Schema Definition:** [`schemas/buildclaim.schema.json`](file:///schemas/buildclaim.schema.json) &rarr; The canonical JSON schema mapped directly from the CLAEG specification.
+- **Reference Parser CLI:** [`bin/veritas_stub.py`](file:///bin/veritas_stub.py) &rarr; A lightweight Python CLI stub demonstrating how INTAKE handles structural parsing, canonicalization, and hashing.
+
+```bash
+# Test a theoretical claim through the INTAKE gate
+python bin/veritas_stub.py ./path/to/mock_claim.json
+```
+
+---
+
 | # | Gate Name | Enforcement Focus | Status |
 |---|------------|-------------------|---------|
 | **1** | **INTAKE** | Parse, validate, and canonicalize the BuildClaim. | Enforced |

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERITAS Ω-CODE — Public Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bk: #09090b; --bk2: #111114; --bk3: #18181c; --bkb: #27272e;
+  --gp: #c9a84c; --gb: #e4c76b; --gd: #a08735;
+  --gf: rgba(201,168,76,0.08); --gbr: rgba(201,168,76,0.2);
+  --t1: #e8e6e1; --t2: #9d9b95; --t3: #6b6964;
+  --red: #e05252; --grn: #5cb870; --amb: #d4a03c; --blu: #5b8fd4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bk);color:var(--t1);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px}
+
+/* header */
+.hdr{text-align:center;padding:40px 0 60px;position:relative;width:100%;max-width:920px}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gp))}
+.omega{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:700;color:var(--gp);line-height:1;margin-bottom:8px;text-shadow:0 0 60px rgba(201,168,76,.3),0 0 120px rgba(201,168,76,.1)}
+.hdr-t{font-size:14px;font-weight:600;letter-spacing:.3rem;text-transform:uppercase;color:var(--gd);margin-bottom:6px}
+.hdr-s{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--t2);font-style:italic}
+
+/* card container */
+.dash{display:grid;grid-template-columns:repeat(auto-fit, minmax(400px, 1fr));gap:24px;width:100%;max-width:920px;margin-bottom:60px}
+
+/* cards */
+.cr{background:var(--bk2);border:1px solid var(--bkb);padding:40px;text-decoration:none;display:flex;flex-direction:column;position:relative;transition:all .3s ease;overflow:hidden}
+.cr::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--bkb);transition:all .3s ease}
+.cr:hover{transform:translateY(-4px);border-color:var(--gbr);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.cr:hover::before{background:var(--gp)}
+
+.cr-t{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--t1);line-height:1.2;margin-bottom:12px;transition:color .3s ease}
+.cr:hover .cr-t{color:var(--gb)}
+.cr-d{font-size:14px;color:var(--t2);margin-bottom:30px;flex-grow:1}
+
+.cr-m{display:flex;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid var(--bkb)}
+.cr-c{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em}
+.cr-btn{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gp);display:flex;align-items:center;gap:8px}
+.cr-btn::after{content:'→';transition:transform .3s ease}
+.cr:hover .cr-btn::after{transform:translateX(4px)}
+
+/* info section */
+.info{max-width:920px;width:100%;background:var(--bk3);border-left:3px solid var(--gp);padding:30px;margin-bottom:60px}
+.info-t{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--t1);margin-bottom:12px}
+.info-p{font-size:14px;color:var(--t2)}
+
+/* footer */
+.ft{text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;max-width:920px;width:100%;margin-top:auto}
+
+@media (max-width: 600px) {
+  .dash{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-t">VERITAS Sovereign Suite</div>
+  <div class="omega">Ω-CODE v2.0</div>
+  <div class="hdr-s">The API of Trust</div>
+</div>
+
+<div class="info">
+  <div class="info-t">A Deterministic Verification Protocol</div>
+  <div class="info-p">Welcome to the canonical hub for the VERITAS Ω-CODE. This dashboard provides access to the immutable, cryptographic verifications of our software supply chain. Trust is no longer implied; it is mathematically enforced. Every claim must pass 10 structural gates before receiving a SEAL. View the official reports below.</div>
+</div>
+
+<div class="dash">
+  
+  <a href="VERITAS_OMEGA_CODE_v2.0.html" class="cr">
+    <div class="cr-t">Canonical Specification<br>v2.0.0</div>
+    <div class="cr-d">The definitive language construct, structural design, and computational boundaries governing the VERITAS 10-Gate execution engine. Completely strictly typed and deterministically enforced.</div>
+    <div class="cr-m">
+      <div class="cr-c">SHA-256 Validated</div>
+      <div class="cr-btn">View Spec</div>
+    </div>
+  </a>
+
+  <a href="OMEGA_CODE_FULL_RUN_REPORT.html" class="cr">
+    <div class="cr-t">Sealed Proof-of-Work<br>Pipeline Report</div>
+    <div class="cr-d">An immutable cryptographic trace of an execution passing through all 10 VERITAS gates: INTAKE &rarr; TRACE/SEAL. Explains exactly what was checked, and proves the result.</div>
+    <div class="cr-m">
+      <div class="cr-c">Status: SEALED</div>
+      <div class="cr-btn">View Report</div>
+    </div>
+  </a>
+
+</div>
+
+<div class="ft">Built by RJ Lopez | VERITAS Framework<br>c. 2026 Sovereign Systems</div>
+
+</body>
+</html>
