@@ -15,8 +15,6 @@
 
 ---
 
-## ⚡ The 10-Second Hook
-
 > **This system decides whether software should be trusted.**
 > 
 > It evaluates a claim across 10 structural enforcement gates.  
