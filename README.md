@@ -84,16 +84,18 @@ flowchart LR
     class INCONCLUSIVE,MORE inc;
 ```
 
-### 👉 Real-World Examples
+### 👉 Canonical Real-World Outcomes
 
-**1. `auth-api` v0.3.0 &rarr; 🔴 VIOLATION**
-> Gate 8: SECURITY detected a hardcoded secret in the build manifest. The pipeline halted instantly. The system was shut down before deployment.
+The following scenarios are canonical demonstrations of the pipeline's non-PASS terminal states, designed to enforce trust by preventing silent failure. (The `auth-api` trace example above demonstrates the immediate execution halt of a `VIOLATION`).
 
-**2. `pricing-engine` v1.2.4 &rarr; 🟡 MODEL_BOUND**
-> Gate 9: ADVERSARY fuzzing revealed that a 15% perturbation in bounds degraded 30% of the cost paths over threshold. The pipeline flagged the fragility risk and forced isolated containment. 
+**1. The `VIOLATION` State &rarr; `auth-api` v0.3.0**
+> Gate 8: SECURITY detected a hardcoded secret in the build manifest. The pipeline halted instantly. The system was shut down before deployment, averting a critical supply-chain breach.
 
-**3. `ml-pipeline` v4.0.1 &rarr; ⚪ INCONCLUSIVE**
-> Gate 4: EVIDENCE found that 3 independent sources were required, but only 2 were provided (`K < 3`). Quality could not be established. The system required more evidence to proceed.
+**2. The `MODEL_BOUND` State &rarr; `pricing-engine` v1.2.4**
+> Gate 9: ADVERSARY fuzzing revealed that a 15% perturbation in bounds degraded 30% of the cost paths over threshold. The pipeline flagged the fragility risk and forced isolated containment, averting silent structural degradation.
+
+**3. The `INCONCLUSIVE` State &rarr; `ml-pipeline` v4.0.1**
+> Gate 4: EVIDENCE found that 3 independent sources were required, but only 2 were provided (`K < 3`). Quality could not be established. The system halted execution and demanded more evidence to proceed, averting unverified trust.
 
 ---
 
