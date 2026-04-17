@@ -15,6 +15,25 @@
 
 ---
 
+## ⚡ The 10-Second Hook
+
+> **This system decides whether software should be trusted.**
+> 
+> It evaluates a claim across 10 structural enforcement gates.  
+> If any gate fails &rarr; execution halts immediately.  
+> If all pass &rarr; the result is cryptographically sealed with a reproducible trace.
+
+---
+
+## 🛠️ How it's used
+
+1. **Define a BuildClaim** (what your system asserts is true).
+2. **Run it through the 10-gate pipeline.**
+3. **The system returns:** `PASS`, `VIOLATION`, `MODEL_BOUND`, or `INCONCLUSIVE`.
+4. **If `PASS`** &rarr; the result is sealed and your software is deployed.
+
+---
+
 ## ⚡ What this actually does (The "Why")
 
 **What this is:**
