@@ -13,9 +13,43 @@
 
 ---
 
+**A Deterministic Verification Protocol, not just another tool.**
+
+### What this is:
+A deterministic verification protocol that evaluates software claims across 10 structural enforcement gates.
+
+### What it does:
+It decides whether a system can actually be trusted — enforcing a strict terminal outcome of `PASS`, `VIOLATION`, `MODEL_BOUND`, or `INCONCLUSIVE`.
+
+### What makes it different:
+It halts immediately on failure, mandates mathematically independent evidence, and guarantees an immutable, cryptographic execution trace on the S.E.A.L. Ledger.
+
+<br>
+
+### 🔍 Concrete Example
+**`auth-api v0.3.0`**
+>
+> Gate 8: **SECURITY** 
+> &rarr; `SECRET_DETECTED`
+> &rarr; `HALT`
+> 
+> **Result:** `VIOLATION`
+
+---
+
+## 🛑 What this prevents
+
+- Shipping code with hidden secrets
+- Passing tests but failing under perturbation
+- Trusting single-source or biased evidence
+- Silent cost or threshold overruns
+- Undetected supply chain risk
+
+---
+
 ## 🏛️ System Architecture
 
-**VERITAS Ω-CODE v2.0** is the canonical, deterministic software verification layer for the VERITAS ecosystem. It enforces a strict, 10-gate evaluation pipeline powered by the Sovereign Session Protocol and the `omega-brain-mcp`.
+**VERITAS Ω-CODE v2.0** is the canonical verification protocol for the VERITAS ecosystem. It enforces its strict, 10-gate evaluation pipeline powered by the Sovereign Session Protocol and the `omega-brain-mcp`.
 
 > "If it cannot be expressed as typed, declared, constraint-bound assertions with artifact evidence, it cannot be evaluated."
 
@@ -53,16 +87,21 @@ This repository tracks the immutable specification and reports of the VERITAS Ω
 
 ---
 
-## 🛡️ Resolution Verdicts
+## 🛡️ The API of Trust (Verdicts)
 
-All evaluations terminate in one of four CLAEG states:
+Right now, trust is implied. VERITAS makes it explicit. Every evaluation resolves to one of four CLAEG terminal states:
 
-| Verdict | Meaning | Action |
-|---------|---------|--------|
-| `PASS` | All gates satisfied. Artifact deployable under declared regime. | Stable Continuation |
-| `MODEL_BOUND` | Gates pass but resource/coverage/confidence near redline. | Isolated Containment |
-| `INCONCLUSIVE`| Insufficient evidence or solver timeout. Cannot affirm. | Terminal Shutdown |
-| `VIOLATION` | Constraint failure, vulnerability, or test failure. | Terminal Shutdown |
+### 🟢 `PASS`
+All gates satisfied. Artifact is fully verified and deployable under the declared operational regime. -> **STABLE_CONTINUATION**
+
+### 🟡 `MODEL_BOUND`
+Gates mathematically pass, but computational resources, coverage, or structural confidence levels are riding the redline. -> **ISOLATED_CONTAINMENT**
+
+### ⚪ `INCONCLUSIVE`
+Insufficient evidence independence, structurally low quality, or algorithmic decidability timeouts. The system cannot affirm trust. -> **TERMINAL_SHUTDOWN**
+
+### 🔴 `VIOLATION`
+Constraint failure, severe vulnerability, type mismatch, or threshold collapse. The system halted. -> **TERMINAL_SHUTDOWN**
 
 ---
 
