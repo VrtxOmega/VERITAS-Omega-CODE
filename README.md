@@ -34,25 +34,25 @@ Every pipeline execution maps directly to a strict terminal outcome. There is no
 
 ```mermaid
 flowchart LR
-    EVAL[Evaluate Claim] --> 🟢PASS
-    EVAL --> 🔴VIOLATION
-    EVAL --> 🟡MODEL_BOUND
-    EVAL --> ⚪INCONCLUSIVE
+    EVAL["Evaluate Claim"] --> PASS["🟢 PASS"]
+    EVAL --> VIOLATION["🔴 VIOLATION"]
+    EVAL --> MODEL_BOUND["🟡 MODEL_BOUND"]
+    EVAL --> INCONCLUSIVE["⚪ INCONCLUSIVE"]
     
-    🟢PASS -->|All Gates Satisfied| EXEC[Full Execution / Stable Continuation]
-    🔴VIOLATION -->|Constraint Failure/Risk| HALT[Halt Early / Terminal Shutdown]
-    🟡MODEL_BOUND -->|Thresholds Redlining| FLAG[Flag Risk / Isolated Containment]
-    ⚪INCONCLUSIVE -->|Insufficient Data| MORE[Require More Evidence / Terminal]
+    PASS -->|"All Gates Satisfied"| EXEC["Full Execution / Stable Continuation"]
+    VIOLATION -->|"Constraint Failure/Risk"| HALT["Halt Early / Terminal Shutdown"]
+    MODEL_BOUND -->|"Thresholds Redlining"| FLAG["Flag Risk / Isolated Containment"]
+    INCONCLUSIVE -->|"Insufficient Data"| MORE["Require More Evidence / Terminal"]
 
     classDef pass fill:#0e2a14,stroke:#5cb870,color:#5cb870,stroke-width:2px;
     classDef fail fill:#2a0e0e,stroke:#e05252,color:#e05252,stroke-width:2px;
     classDef warn fill:#2a230e,stroke:#d4a03c,color:#d4a03c,stroke-width:2px;
     classDef inc fill:#1a1a1a,stroke:#9d9b95,color:#9d9b95,stroke-width:2px;
     
-    class 🟢PASS,EXEC pass;
-    class 🔴VIOLATION,HALT fail;
-    class 🟡MODEL_BOUND,FLAG warn;
-    class ⚪INCONCLUSIVE,MORE inc;
+    class PASS,EXEC pass;
+    class VIOLATION,HALT fail;
+    class MODEL_BOUND,FLAG warn;
+    class INCONCLUSIVE,MORE inc;
 ```
 
 ### 👉 Real-World Examples
